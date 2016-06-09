@@ -20,6 +20,7 @@
 
 	import (
 		"zlog"
+		"time"
 	)
 
 	func main() {
