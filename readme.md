@@ -63,7 +63,7 @@
 
 日志消息格式：  
 
-    日期  	  时间.微秒      pid  日志级别  源文件名：行号：函数名 -   正文
+    日期  	    时间.微秒   	pid  日志级别  源文件名：行号：函数名 -   正文
     20160609 23:31:21.770367   28599 ERROR    demo.go:33:main.main - Hello
 
 每条日志独占一行，时间戳精确到微秒(便于用日志时间来观测性能)，最好打印Goroutine ID、文件名、行号、函数名，便于调试。由于官方不允许获取Goroutine ID，所以只能用pid来代替。
@@ -82,9 +82,9 @@
 
 比如一个进程每秒处理2万个请求，每个请求打印5条日志，这时就需要最少有10w/s的性能。但是如果日志库的性能越高，进程就能腾出更多的资源来作正事。
 
-## 实现：
+## 实现
 
-高性能的日志库都需要对`磁盘写操作`友好，一般通过`收集日志串，再批量顺序写文件`来提高性能。所以会有多个生产者Goroutine和一个消费者Goroutine。在实现的时候，会思考一些问题：
+高性能的日志库都需要对**磁盘写操作**友好，一般通过**收集日志串，再批量顺序写文件**来提高性能。所以会有多个生产者Goroutine和一个消费者Goroutine。在实现的时候，会思考一些问题：
 
 1. Buffer如何设计？什么时候唤醒日志协程从Buffer中取数据？
 2. 如何减少 业务协程、日志协程 访问Buffer时的锁竞争？
@@ -93,9 +93,9 @@
 5. 什么时候切换写到另一个日志文件？什么时候flush到日志文件？
 6. 若日志串写入过多，日志线程来不及消费，怎么办？
 
-{%img center ./buffer.jpg%}
+![buffer](./buffer.jpg)
 
-Buffer之间数据的流转 如图所示，程序启动时，预分配多个buffer存放到emptyBuffersQueue中，业务协程在输出日志时，如果当前curBuffer为空、或者空间不够，就用emptyBufferQueue中取一个buf，写入日志串，再将原来的curBuffer存入到fullBuffersQueue中。而日志协程，不停地从fullBuffersQueue中取出所有的buffer，批量写入到文件中，然后再存入到emptyBufferQueue中。  
+Buffer之间数据的流转 如图所示，程序启动时，预分配多个buffer存放到`emptyBuffersQueue`中，业务协程在输出日志时，如果当前`curBuffer`为空、或者空间不够，就用`emptyBufferQueue`中取一个buf，写入日志串，再将原来的`curBuffer`存入到`fullBuffersQueue`中。而日志协程，不停地从`fullBuffersQueue`中取出所有的buffer，批量写入到文件中，然后再存入到`emptyBufferQueue`中。  
 这么设计的好处：可重复利用Buffer空间，减少分配大块内存的时间。  
 
 **性能优化的tips：**
@@ -112,7 +112,7 @@ Buffer之间数据的流转 如图所示，程序启动时，预分配多个buff
 
 PS: 在编译期获取 `源文件名、行号、函数名`，需要有编译器的支持。Go在2015的时候，有人提议 增加两个类似__FILE__, __LINE__的宏(见这两个issue, [issue1](https://github.com/Sirupsen/logrus/issues/63), [issue2](https://github.com/golang/go/issues/12876))，不过，被人驳斥 这个做法不符合Go的美学价值观，所以到现在一直没提供。  
 
-**Benchmark：**
+**Benchmark：**  
 在一台   HP笔记本电脑 上的测试：
 配置：CPU 8核 Intel(R) Core(TM) i7-3632QM 2.20GHz，内存8G，磁盘(同步)写入带宽70.0MB/s
 系统：Ubuntu 14.04
