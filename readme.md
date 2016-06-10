@@ -118,10 +118,10 @@ Buffer之间数据的流转 如图所示，程序启动时，预分配多个buff
 配置：CPU 8核 Intel(R) Core(TM) i7-3632QM 2.20GHz，内存8G，磁盘(同步)写入带宽70.0MB/s  
 系统：Ubuntu 14.04  
 
-    BenchmarkZlogPrintFileName_Parallel-8    	      10000000	      1158 ns/op
-    BenchmarkZlogPrintFileName_Singal-8                10000000	      2144 ns/op
-    BenchmarkZlogNonePrintFileName_Parallel-8	  30000000	       566 ns/op
-    BenchmarkZlogNonePrintFileName_Singal-8  	  10000000	      1141 ns/op
+    BenchmarkZlogPrintFileName_Parallel-8    	               10000000	      1158 ns/op
+    BenchmarkZlogPrintFileName_Singal-8                        10000000	      2144 ns/op
+    BenchmarkZlogNonePrintFileName_Parallel-8	               30000000	       566 ns/op
+    BenchmarkZlogNonePrintFileName_Singal-8  	               10000000	      1141 ns/op
 
 单Goroutine写日志的速度大约是: 87.6w/s(设置不写文件名、行号), 46.6w/s(设置写文件名、行号)。  
 多Goroutine同时写日志的速度大约是: 176.6w/s(设置不写文件名、行号), 86.3w/s(设置写文件名、行号)。  
