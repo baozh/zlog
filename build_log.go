@@ -83,8 +83,6 @@ func WaitingAndSetCurrentBuf(l *Logger, startTime time.Time) {
 	l.isWaitingAvailBuffer = false
 }
 
-
-
 const (
 	DEFALUT_LOG_SIZE int = 4000
 )
@@ -176,36 +174,6 @@ func (log *LogMsg) fourDigits(index, value int) {
 	value /= 10
 	log.logContent[index] = digits[value%10]
 }
-
-//func (log *LogMsg) sixDigits(index, value int) {
-//	log.logContent[index+5] = digits[value%10]
-//	value /= 10
-//	log.logContent[index+4] = digits[value%10]
-//	value /= 10
-//	log.logContent[index+3] = digits[value%10]
-//	value /= 10
-//	log.logContent[index+2] = digits[value%10]
-//	value /= 10
-//	log.logContent[index+1] = digits[value%10]
-//	value /= 10
-//	log.logContent[index] = digits[value%10]
-//}
-//
-//func (log *LogMsg) sevenDigits(index, value int) {
-//	log.logContent[index+6] = digits_other[value%10]
-//	value /= 10
-//	log.logContent[index+5] = digits_other[value%10]
-//	value /= 10
-//	log.logContent[index+4] = digits_other[value%10]
-//	value /= 10
-//	log.logContent[index+3] = digits_other[value%10]
-//	value /= 10
-//	log.logContent[index+2] = digits_other[value%10]
-//	value /= 10
-//	log.logContent[index+1] = digits_other[value%10]
-//	value /= 10
-//	log.logContent[index] = digits_other[value%10]
-//}
 
 // nDigits formats an n-digit integer at buf.tmp[i],
 // padding with pad on the left.

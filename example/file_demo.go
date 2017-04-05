@@ -1,7 +1,7 @@
 package main
 
 import (
-	"zlog"
+	"github.com/baozh/zlog"
 	"time"
 	"fmt"
 	"runtime"

@@ -2,7 +2,7 @@ package bench
 
 import (
 	"testing"
-	"zlog"
+	"github.com/baozh/zlog"
 	"time"
 )
 

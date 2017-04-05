@@ -11,9 +11,9 @@ const (
 )
 
 type LogMsgBuffer struct {
-	buffer []byte
+	buffer 		[]byte
 	startWriteIndex int   //next write index
-	capacity int
+	capacity 	int
 }
 
 func NewLogMsgBuffer(bufferSize int) *LogMsgBuffer {

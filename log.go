@@ -120,14 +120,14 @@ type Writer interface {
 
 type Logger struct {
 	writer     		Writer
-	currentLevel    LogLevel             //当前日志级别
-	currentBuffer   *LogMsgBuffer
-	curBufMutex     sync.Mutex
-	flushInterval   int                 //刷出日志的间隔 (单位：秒)
-	emptyBuffers    *BufferContainer
-	fullBuffers     *BufferContainer
-	isRunning		bool   				/* atomic */
-	isWaitingAvailBuffer  bool			/* atomic */
+	currentLevel 	  	LogLevel            //当前日志级别
+	currentBuffer  		*LogMsgBuffer
+	curBufMutex     	sync.Mutex
+	flushInterval   	int                 //刷出日志的间隔 (单位：秒)
+	emptyBuffers    	*BufferContainer
+	fullBuffers     	*BufferContainer
+	isRunning		bool   		    /* atomic */
+	isWaitingAvailBuffer  	bool		    /* atomic */
 	isPrintFileNameLineNo  	bool
 }
 

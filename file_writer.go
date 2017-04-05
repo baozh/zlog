@@ -15,17 +15,18 @@ type FileWriter struct {
 	bufWriter 	*bufio.Writer
 	file   		*os.File
 	nbytes 		uint64    //当前已写入的字节数
-	startOfPeriod int64
+	startOfPeriod 	int64
 	count 		int
-	logFilePath string
+	logFilePath 	string
 }
 
 
-const rollSize uint64 = 100*1024*1024
-const bufferSize = 256 * 1024
-const rollPerSeconds = 60 * 60 *24
-const checkRotateEveryN = 102400
-
+const (
+	rollSize uint64 = 100*1024*1024
+	bufferSize = 256 * 1024
+	rollPerSeconds = 60 * 60 *24
+	checkRotateEveryN = 102400
+)
 
 func NewFileWriter(logger *Logger, filePath string) (*FileWriter, error) {
 	fw := &FileWriter{}
