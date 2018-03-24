@@ -2,30 +2,29 @@ package zlog
 
 import (
 	"bufio"
-	"os"
 	"errors"
+	"os"
 	"path/filepath"
-	"time"
 	"runtime"
 	"strings"
+	"time"
 )
 
 type FileWriter struct {
-	logger 		*Logger
-	bufWriter 	*bufio.Writer
-	file   		*os.File
-	nbytes 		uint64    //当前已写入的字节数
-	startOfPeriod 	int64
-	count 		int
-	logFilePath 	string
+	logger        *Logger
+	bufWriter     *bufio.Writer
+	file          *os.File
+	nbytes        uint64 //当前已写入的字节数
+	startOfPeriod int64
+	count         int
+	logFilePath   string
 }
 
-
 const (
-	rollSize uint64 = 100*1024*1024
-	bufferSize = 256 * 1024
-	rollPerSeconds = 60 * 60 *24
-	checkRotateEveryN = 102400
+	rollSize          uint64 = 100 * 1024 * 1024
+	bufferSize               = 256 * 1024
+	rollPerSeconds           = 60 * 60 * 24
+	checkRotateEveryN        = 102400
 )
 
 func NewFileWriter(logger *Logger, filePath string) (*FileWriter, error) {
@@ -89,7 +88,7 @@ func (fw *FileWriter) formatHeader(level LogLevel, isPrintFileName bool) *LogMsg
 			line = 1
 			funcName = "NoneFuncName"
 		}
-		msg.appendString(" "+ file + ":")
+		msg.appendString(" " + file + ":")
 		msg.appendInt(line)
 		msg.appendString(":" + funcName + " - ")
 	} else {
@@ -108,9 +107,9 @@ func (fw *FileWriter) Rotate() error {
 	//文件名格式：日期-时间.basename.主机名.pid.log
 	fileName := recordPool.Get().(*LogMsg)
 	defer func() {
-			fileName.Clear()
-			recordPool.Put(fileName)
-		}()
+		fileName.Clear()
+		recordPool.Put(fileName)
+	}()
 
 	now := time.Now()
 	year, month, day := now.Date()
@@ -122,8 +121,8 @@ func (fw *FileWriter) Rotate() error {
 	fileName.twoDigits(9, hour)
 	fileName.twoDigits(11, minute)
 	fileName.twoDigits(13, second)
-	fileName.logContent[14] = '.'
-	fileName.writeIndex = 15
+	fileName.logContent[15] = '.'
+	fileName.writeIndex = 16
 	fileName.appendString(baseName + "." + hostName + ".")
 	fileName.appendInt(pid)
 	fileName.appendString(".log")
@@ -155,7 +154,7 @@ func (fw *FileWriter) Write(content []byte) error {
 		fw.Rotate()
 	} else {
 		fw.count++
-		if (fw.count > checkRotateEveryN) {
+		if fw.count > checkRotateEveryN {
 			fw.count = 0
 			thisPeriod := time.Now().Unix() / rollPerSeconds * rollPerSeconds
 			if thisPeriod != fw.startOfPeriod {
